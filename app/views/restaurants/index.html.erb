@@ -1,8 +1,17 @@
 <h1>GET YOUR RESTAURANT HERE</h1>
 
 <form class="yelpSearch">
-  <input type="text"></input>
+  <input class="location" type="text" placeholder="location"></input>
+  <input class="term" type="text" placeholder="Type of food"></input>
+<!--   <select>
+    <option value="0">Best Match</option>
+    <option value="2">Highest Rated</option>
+  </select> -->
   <input type="submit"></input>
 </form>
 
+<div id="map" style="width:600px;height:600px;">I am a map</div>
+
 <div class="result"></div>
+
+<%= "<script src='https://maps.googleapis.com/maps/api/js?key=#{ENV["GMAPS_API"]}&callback=initMap' async defer></script>".html_safe %>
