@@ -1,6 +1,6 @@
 <div class="topbar">
   <div class="container">
-  <h1 class="title">Find a sushi restaurant near you!</h1>
+  <h1 class="title">Find a WHATEVER restaurant near you!</h1>
 
   <form class="yelpSearch">
     <input class="term" type="text" placeholder="Type of food"></input>
@@ -18,14 +18,14 @@
 
   <div class="result"></div>
 
-  <%= "<script src='https://maps.googleapis.com/maps/api/js?key=#{ENV["GMAPS_API"]}&callback=initMap&libraries=places' async defer></script>".html_safe %>
+  <%= "<script src='https://maps.googleapis.com/maps/api/js?key=#{ENV["GMAPS_API"]}&libraries=places' async defer></script>".html_safe %>
 
 
   <script id="entry-template" type="text/x-handlebars-template">
   <div class="card">
     <div class="card-image">
       <figure class="image is-4by3">
-        <img src={{image}} alt="{{name}}">
+        <img class="yelpImage" src={{image}} alt="{{name}}">
       </figure>
     </div>
     <div class="card-content">

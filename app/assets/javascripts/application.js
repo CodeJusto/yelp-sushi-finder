@@ -18,9 +18,7 @@
 
   var map;
   var currentMarkers = [];
-  initMap = function() {
-
-  }
+  var currentIndex = null;
 
   function clearMap() {
     currentMarkers.forEach(function(marker) {
@@ -30,7 +28,7 @@
   }
 
   function loadMap(data) {
-    clearMap()
+    clearMap();
     var location = {
       lat: data.businesses[0].location.coordinate.latitude,
       lng: data.businesses[0].location.coordinate.longitude
@@ -46,11 +44,12 @@
 $(document).ready(function() {
   
 function addMarker(restaurant) {
+    var restaurant_coords = restaurant.location.coordinate
     var location = {
-      lat: restaurant.location.coordinate.latitude,
-      lng: restaurant.location.coordinate.longitude
+      lat: restaurant_coords.latitude,
+      lng: restaurant_coords.longitude
     };
-
+    //handlebar stuff for infowindow
     var source   = $("#entry-template").html();
     var template = Handlebars.compile(source);
     var high_res_img = restaurant.image_url.replace("ms.jpg", "l.jpg")
@@ -60,7 +59,7 @@ function addMarker(restaurant) {
                   phone: restaurant.display_phone,
                   address: restaurant.location.display_address,
                   url: restaurant.url};
-    var html    = template(context);
+    var html = template(context);
     var infoWindow = new google.maps.InfoWindow({
       content: html
     });
@@ -72,18 +71,21 @@ function addMarker(restaurant) {
     });
 
     marker.addListener('click', function() {
+      if(currentIndex !== null){
+        debugger
+        infoWindow.close(map, currentMarkers[currentIndex])
+      }
+      currentIndex = currentMarkers.indexOf(marker);
       infoWindow.open(map, marker);
+      
     });
 
     map.addListener('click', function() {
+      currentIndex = null;
       infoWindow.close(map, marker);
     })
-
-    //marker, what is my nfo?
-    //marker.addListner restaurant.infoString
-    currentMarkers.push(marker);
-    // debugger
-  };
+      currentMarkers.push(marker);
+    };
 
 
   $('.yelpSearch').on('submit',function(e) {
