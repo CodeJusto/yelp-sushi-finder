@@ -5,7 +5,7 @@ class RestaurantsController < ApplicationController
 
 
   def search
-    location = params[:location]
+    location = "#{params[:location]}"
     extras = { term: params[:search], limit: 10, cc: params[:country]}
     # binding.pry
     @results = Yelp.client.search(location, extras)

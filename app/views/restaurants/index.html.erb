@@ -1,19 +1,49 @@
-<h1>Find a sushi restaurant near you!</h1>
+<div class="topbar">
+  <div class="container">
+  <h1 class="title">Find a sushi restaurant near you!</h1>
 
-<form class="yelpSearch">
-  <input class="term" type="text" value ="sushi" placeholder="Type of food"></input>
-  <input class="location" type="text" placeholder="location"></input>
-  <select class="country">
-    <option value="CA">Canada</option>
-    <option value="US">USA</option>
-  </select>
-  <input type="submit"></input>
-</form>
+  <form class="yelpSearch">
+    <input class="term" type="text" placeholder="Type of food"></input>
+    <input class="location" type="text" placeholder="City"></input>
+    <select class="country">
+      <option value="CA">Canada</option>
+      <option value="US">USA</option>
+    </select>
+    <input type="submit"></input>
+  </form>
+</div>
+</div>
+<div class="map">
+  <div id="map"></div>
 
-<div id="map" style="width:600px;height:600px;">I am a map</div>
+  <div class="result"></div>
 
-<div class="result"></div>
-
-<%= "<script src='https://maps.googleapis.com/maps/api/js?key=#{ENV["GMAPS_API"]}&callback=initMap&libraries=places' async defer></script>".html_safe %>
+  <%= "<script src='https://maps.googleapis.com/maps/api/js?key=#{ENV["GMAPS_API"]}&callback=initMap&libraries=places' async defer></script>".html_safe %>
 
 
+  <script id="entry-template" type="text/x-handlebars-template">
+  <div class="card">
+    <div class="card-image">
+      <figure class="image is-4by3">
+        <img src={{image}} alt="{{name}}">
+      </figure>
+    </div>
+    <div class="card-content">
+      <div class="media">
+        <div class="media-content">
+          <p class="title is-3">{{name}}<small>
+          <br>
+          <a href="{{url}}" class="subtitle is-6">Visit our Yelp page!</a></small></p>
+
+        </div>
+      </div>
+
+      <div class="content">
+        <p><strong>Rating: </strong>{{rating}}/5<br>
+        <strong>Phone: </strong>{{phone}}<br>
+        <strong>Address: </strong>{{address}}</p>
+      </div>
+    </div>
+  </div></script>
+</div>
+</div>

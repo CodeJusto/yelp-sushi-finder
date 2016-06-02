@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+//= require handlebars
 
   var map;
   var currentMarkers = [];
@@ -42,16 +43,26 @@
   }
 
 
-
-  function addMarker(restaurant) {
+$(document).ready(function() {
+  
+function addMarker(restaurant) {
     var location = {
       lat: restaurant.location.coordinate.latitude,
       lng: restaurant.location.coordinate.longitude
     };
 
-
+    var source   = $("#entry-template").html();
+    var template = Handlebars.compile(source);
+    var high_res_img = restaurant.image_url.replace("ms.jpg", "l.jpg")
+    var context = {name: restaurant.name,
+                  image: high_res_img, 
+                  rating: restaurant.rating, 
+                  phone: restaurant.display_phone,
+                  address: restaurant.location.display_address,
+                  url: restaurant.url};
+    var html    = template(context);
     var infoWindow = new google.maps.InfoWindow({
-      content: "This is a pretty good sushi restaurant"
+      content: html
     });
 
     var marker = new google.maps.Marker({
@@ -64,20 +75,17 @@
       infoWindow.open(map, marker);
     });
 
+    map.addListener('click', function() {
+      infoWindow.close(map, marker);
+    })
+
     //marker, what is my nfo?
     //marker.addListner restaurant.infoString
     currentMarkers.push(marker);
     // debugger
   };
 
-//handle submit
-//get 'map'
-//clear all the markers right now
-//add markers from the json returned from the submit list
 
-
-$(document).ready(function() {
-  
   $('.yelpSearch').on('submit',function(e) {
     e.preventDefault();
     $('.result').empty();
@@ -85,7 +93,7 @@ $(document).ready(function() {
     $.ajax({
       url: '/search',
       data: {
-        //add a state/province box
+        // state: $('.yelpSearch').find('state').val(),
         search: $('.yelpSearch').find('.term').val(),
         location: $('.yelpSearch').find('.location').val(),
         country: $('.yelpSearch').find('.country').val()
@@ -99,13 +107,6 @@ $(document).ready(function() {
             console.log(data.businesses[i].name);
             var restaurant = data.businesses[i];
             addMarker(restaurant);
-            // debugger
-              $('.result').append(
-                  'Name: ' + restaurant.name,
-                 '<br>', 'Rating: ' + restaurant.rating,
-                 '<br>', 'City: ' + restaurant.location.city + ', ' + restaurant.location.country_code,
-                 '<br><br>');
-            
           }
         }
         

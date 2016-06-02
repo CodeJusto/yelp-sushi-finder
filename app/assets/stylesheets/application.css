@@ -13,3 +13,20 @@
  *= require_tree .
  *= require_self
  */
+
+
+#map {
+    width: 100%;
+    min-height: 90vh;
+    max-height: 90%;
+    position: absolute;
+    margin: 0 auto;
+    background-image: url(http://downtownsushibar.com/wp-content/uploads/2010/09/Backhouse-Assorted-Sushi.jpg);
+    background-color: #000000;
+    background-repeat: no-repeat;
+}
+
+.topbar {
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
