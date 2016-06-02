@@ -16,11 +16,20 @@
 //= require_tree .
 
   var map;
+  var currentMarkers = [];
   initMap = function() {
 
   }
 
+  function clearMap() {
+    currentMarkers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    currentMarkers.length = 0;
+  }
+
   function loadMap(data) {
+    clearMap()
     var location = {
       lat: data.businesses[0].location.coordinate.latitude,
       lng: data.businesses[0].location.coordinate.longitude
@@ -33,17 +42,32 @@
   }
 
 
+
   function addMarker(restaurant) {
     var location = {
       lat: restaurant.location.coordinate.latitude,
       lng: restaurant.location.coordinate.longitude
     };
 
+
+    var infoWindow = new google.maps.InfoWindow({
+      content: "This is a pretty good sushi restaurant"
+    });
+
     var marker = new google.maps.Marker({
       map: map,
       position: location,
       title: restaurant.name
     });
+
+    marker.addListener('click', function() {
+      infoWindow.open(map, marker);
+    });
+
+    //marker, what is my nfo?
+    //marker.addListner restaurant.infoString
+    currentMarkers.push(marker);
+    // debugger
   };
 
 //handle submit
@@ -61,12 +85,14 @@ $(document).ready(function() {
     $.ajax({
       url: '/search',
       data: {
-        search: $(this).find('.term').val(),
-        location: $(this).find('.location').val(),
-        // sort: $(this).find('.sort option:selected').text()
+        //add a state/province box
+        search: $('.yelpSearch').find('.term').val(),
+        location: $('.yelpSearch').find('.location').val(),
+        country: $('.yelpSearch').find('.country').val()
       },
       method: 'GET',
       success: function(data) {
+        $('.result').empty();
         loadMap(data);
         for (var i = 0; i <= data.businesses.length; i++){
           if(data.businesses[i].name) {
@@ -77,8 +103,6 @@ $(document).ready(function() {
               $('.result').append(
                   'Name: ' + restaurant.name,
                  '<br>', 'Rating: ' + restaurant.rating,
-                 '<br>', 'Latitude: ' + restaurant.location.coordinate.latitude,
-                 '<br>', 'Longitude: ' + restaurant.location.coordinate.longitude,
                  '<br>', 'City: ' + restaurant.location.city + ', ' + restaurant.location.country_code,
                  '<br><br>');
             
